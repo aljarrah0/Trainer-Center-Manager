@@ -1,0 +1,40 @@
+{
+  "name": "trainer-center-manager",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aljarrah0/Trainer-Center-Manager.git"
+  },
+  "author": "aljarrah",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aljarrah0/Trainer-Center-Manager/issues"
+  },
+  "homepage": "https://github.com/aljarrah0/Trainer-Center-Manager#readme",
+  "dependencies": {
+    "config": "^3.0.1",
+    "express": "^4.16.4",
+    "full-countries-cities": "0.0.9",
+    "joi": "^14.3.1",
+    "lodash": "^4.17.11",
+    "mongoose": "^5.4.19",
+    "mongoose-sequence": "^5.0.1",
+    "validator": "^10.11.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "babel-loader": "^8.0.5",
+    "eslint": "^5.15.3",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "uglifyjs-webpack-plugin": "^2.1.2",
+    "webpack": "^4.29.6"
+  }
+}
