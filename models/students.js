@@ -35,7 +35,7 @@ const studentsSchema = new mongoose.Schema({
         unique: true,
         maxlength: 14, // 14 digit in egypt
     },
-    homeTell: {
+    homeTel: {
         type: String,
         trim: true,
         maxlength: 12, // +20 50 (7digit)
@@ -75,12 +75,13 @@ const studentsSchema = new mongoose.Schema({
     registerDate: {
         type: Date,
         default: Date.now(),
+        required: true,
     },
     gender: {
         type: String,
         required: true,
-        enum: ['M', 'F'],
-        uppercase: true,
+        enum: ['male', 'female'],
+        lowercase: true,
     },
     studentsType: {
         type: String,
@@ -109,24 +110,18 @@ const Student = mongoose.model('students', studentsSchema);
 function validationStudents(student) {
     const schema = Joi.object().keys({
 
-        fullNameArabic: Joi.string().required().trim().max(255)
-            .min(3),
-        fullNameEnglish: Joi.string().required().trim().max(255)
-            .min(3),
-        nationalID: Joi.string().regex(/^([0-9]*)$/, { name: 'numbers' }).length(14).required(),
-        homeTell: Joi.string().regex(/^([0-9]*)$/, { name: 'numbers' }).length(10),
-        mobile1: Joi.string().regex(/^([0-9]*)$/, { name: 'numbers' }).length(11).required(),
-        mobile2: Joi.string().regex(/^([0-9]*)$/, { name: 'numbers' }).length(11),
-        email: Joi.string().required().trim().email({ minDomainAtoms: 2 }),
-        registerDate: Joi.date().default(Date()),
-        gender: Joi.string().required().trim().uppercase()
-            .only(['M', 'F']),
-        studentsType: Joi.string().required().trim().lowercase()
-            .only(['individual', 'corporate', 'univeristy']),
-        city: Joi.string().required().trim().only(cities),
-        address: Joi.string().required().trim().max(255)
-            .min(5),
-        epmloyeeID: Joi.any().required(),
+        fullNameArabic: Joi.string().required().max(255).min(3).trim(),
+        fullNameEnglish: Joi.string().required().max(255).min(3).trim(),
+        nationalID: Joi.string().regex(/^([0-9]*)$/, { name: 'numbers' }).length(14).required().trim(),
+        homeTel: Joi.string().regex(/^([0-9]*)$/, { name: 'numbers' }).length(10).trim(),
+        mobile1: Joi.string().regex(/^([0-9]*)$/, { name: 'numbers' }).length(11).required().trim(),
+        mobile2: Joi.string().regex(/^([0-9]*)$/, { name: 'numbers' }).length(11).trim(),
+        email: Joi.string().required().email({ minDomainAtoms: 2 }).trim(),
+        gender: Joi.string().required().lowercase().only(['male', 'female']).trim(),
+        studentsType: Joi.string().required().lowercase().only(['individual', 'corporate', 'univeristy']).trim(),
+        city: Joi.string().required().only(cities).trim(),
+        address: Joi.string().required().max(255).min(5).trim(),
+        epmloyeeID: Joi.any().required().trim(),
     });
     return Joi.validate(student, schema);
 }

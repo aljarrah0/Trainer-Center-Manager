@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const _ = require('lodash');
+const mongoose = require('mongoose');
 const { Employee, validate } = require('../models/employees');
 
 router.get('/', async (req, res) => {
@@ -8,6 +9,9 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
+    const validateID =  mongoose.Types.ObjectId.isValid(req.params.id);
+    if(!validateID)return res.status(400).send('the ID is not Correct');
+    
     const employee = await Employee.findById(req.params.id).select('-_id -__v');
     if (!employee) return res.status(404).send('the employee with the given ID was not found');
     res.send(employee);
@@ -39,6 +43,9 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
+    const validateID =  mongoose.Types.ObjectId.isValid(req.params.id);
+    if(!validateID)return res.status(400).send('the ID is not Correct');
+
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 

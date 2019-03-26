@@ -28,7 +28,7 @@ const trainersSchema = new mongoose.Schema({
         unique: true,
         maxlength: 14, // 14 digit in egypt
     },
-    homeTell: {
+    homeTel: {
         type: String,
         trim: true,
         maxlength: 12, // +20 50 (7digit)
@@ -69,14 +69,14 @@ const trainersSchema = new mongoose.Schema({
         type: Date,
         default: Date.now(),
         trim: true,
+        required:true,
     },
     gender: {
         type: String,
         required: true,
-        enum: ['M', 'F'],
-        uppercase: true,
-        trim: true,
-
+        enum: ['male', 'female'],
+        lowercase: true,
+        trim:true,
     },
     city: {
         type: String,
@@ -117,13 +117,11 @@ function validationTrainers(trainer) {
         fullNameEnglish: Joi.string().required().trim().max(255)
             .min(3),
         nationalID: Joi.string().regex(/^([0-9]*)$/, { name: 'numbers' }).length(14).required(),
-        homeTell: Joi.string().regex(/^([0-9]*)$/, { name: 'numbers' }).length(10),
+        homeTel: Joi.string().regex(/^([0-9]*)$/, { name: 'numbers' }).length(10),
         mobile1: Joi.string().regex(/^([0-9]*)$/, { name: 'numbers' }).length(11).required(),
         mobile2: Joi.string().regex(/^([0-9]*)$/, { name: 'numbers' }).length(11),
         email: Joi.string().required().trim().email({ minDomainAtoms: 2 }),
-        registerDate: Joi.date().default(Date()),
-        gender: Joi.string().required().trim().uppercase()
-            .only(['M', 'F']),
+        gender: Joi.string().required().trim().lowercase().only(['male', 'female']),
         city: Joi.string().required().only(cities).trim(),
         address: Joi.string().required().trim().max(255)
             .min(5),
