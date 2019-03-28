@@ -21,6 +21,12 @@ const paymentSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
+    groupID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Group',
+        required: true,
+        trim: true,
+    },
     creationDate: {
         type: Date,
         default: Date.now(),

@@ -22,7 +22,20 @@ router.post('/', async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    const group = new Group(_.pick(req.body, ['groupName', 'employeeID']));
+    const group = new Group(
+        _.pick(req.body,
+            [
+                'employeeID',
+                'groupName',
+                'groupSchedule',
+                'groupStartDate',
+                'groupEndDate',
+                'hourFrom',
+                'hourTo',
+            ]
+        )
+    );
+    
     if (!group) return res.status(404).send('error in the DB');
 
     await group.save();
@@ -37,11 +50,22 @@ router.put('/:id', async (req, res) => {
     if (error) return res.status(400).send(error.details[0].message);
 
     const updateGroup = await Group.findByIdAndUpdate(req.params.id,
-        _.pick(req.body, ['groupName', 'employeeID']),
+        _.pick(req.body,
+            [
+                'employeeID',
+                'groupName',
+                'groupSchedule',
+                'groupStartDate',
+                'groupEndDate',
+                'hourFrom',
+                'hourTo',
+            ]
+        ),
         {
             new: true,
             runValidators: true,
         });
+        
     if (!updateGroup) return res.status(404).send('error in DB');
 
     res.send(updateGroup);

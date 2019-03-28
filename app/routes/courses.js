@@ -26,12 +26,9 @@ router.post('/', async (req, res) => {
         [
             'employeeID',
             'providerID',
-            'groupID',
-            'studentID',
-            'trainerID',
             'courseName',
+            'courseDesc',
             'courseHours',
-            'courseDetails',
             'coursePrice',
             'priceAfterDiscount',
         ]));
@@ -53,12 +50,9 @@ router.put('/:id', async (req, res) => {
             [
                 'employeeID',
                 'providerID',
-                'groupID',
-                'studentID',
-                'trainerID',
                 'courseName',
+                'courseDesc',
                 'courseHours',
-                'courseDetails',
                 'coursePrice',
                 'priceAfterDiscount',
             ]),

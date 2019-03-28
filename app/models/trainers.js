@@ -126,7 +126,6 @@ function validationTrainers(trainer) {
                 .max(255)
                 .min(3),
             fullNameEnglish: Joi.string()
-                .alphanum()
                 .required()
                 .trim()
                 .max(255)

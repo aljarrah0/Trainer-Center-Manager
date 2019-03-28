@@ -105,7 +105,6 @@ function validationEmployee(employee) {
                 .min(3)
                 .trim(),
             fullNameEnglish: Joi.string()
-                .alphanum()
                 .required()
                 .max(255)
                 .min(3)
@@ -138,7 +137,6 @@ function validationEmployee(employee) {
                 .only(['male', 'female'])
                 .trim(),
             city: Joi.string()
-                .alphanum()
                 .required()
                 .only(cities)
                 .trim(),

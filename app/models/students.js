@@ -119,7 +119,6 @@ function validationStudents(student) {
                 .trim(),
             fullNameEnglish: Joi.string()
                 .required()
-                .alphanum()
                 .max(255)
                 .min(3)
                 .trim(),
@@ -146,19 +145,16 @@ function validationStudents(student) {
                 .email({ minDomainAtoms: 2 })
                 .trim(),
             gender: Joi.string()
-                .alphanum()
                 .required()
                 .lowercase()
                 .only(['male', 'female'])
                 .trim(),
             studentsType: Joi.string()
-                .alphanum()
                 .required()
                 .lowercase()
                 .only(['individual', 'corporate', 'univeristy'])
                 .trim(),
             city: Joi.string()
-                .alphanum()
                 .required()
                 .only(cities)
                 .trim(),

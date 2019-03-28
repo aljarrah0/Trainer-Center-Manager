@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const { Employee, validate } = require('../models/employees');
 
 router.get('/', async (req, res) => {
-    const employee = await Employee.find().sort('id').select('-_id -__v');
+    const employee = await Employee.find().sort('id').select('-__v');
     res.send(employee);
 });
 

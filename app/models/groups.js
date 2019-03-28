@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const Joi = require('joi');
+
 // create group schema
 
 const groupSchema = new mongoose.Schema({
@@ -14,7 +15,30 @@ const groupSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        unique: true,
+    },
+    groupSchedule: {
+        type: Date,
+        trim: true,
+    },
+    groupStartDate: {
+        type: Date,
+        required: true,
+        trim: true,
+    },
+    groupEndDate: {
+        type: Date,
+        required: true,
+        trim: true,
+    },
+    hourFrom: {
+        type: Number,
+        required: true,
+        trim: true,
+    },
+    hourTo: {
+        type: Number,
+        required: true,
+        trim: true,
     },
     creationDate: {
         type: Date,
@@ -26,15 +50,25 @@ const groupSchema = new mongoose.Schema({
 
 const Group = mongoose.model('groups', groupSchema);
 
-
 function validateGroup(group) {
     const schema = Joi.object()
         .keys({
+            employeeID: Joi.any()
+                .required(),
             groupName: Joi.string()
-                .alphanum()
                 .required()
                 .trim(),
-            employeeID: Joi.any()
+            groupSchedule: Joi.date()
+                .required(),
+            groupStartDate: Joi.date()
+                .required(),
+            groupEndDate: Joi.date()
+                .required(),
+            hourFrom: Joi.number()
+                .integer()
+                .required(),
+            hourTo: Joi.number()
+                .integer()
                 .required(),
         });
     return Joi.validate(group, schema);
