@@ -10,8 +10,7 @@ const groupStudentsSchema = new mongoose.Schema({
         trim: true,
     },
     groupID: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Group',
+        type: Number,
         required: true,
         trim: true
     },
@@ -26,6 +25,12 @@ const groupStudentsSchema = new mongoose.Schema({
         ref: 'Trainer',
         required: true,
         trim: true,
+    },
+    courseID: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Group',
+        required: true,
+        trim: true
     },
     creationDate: {
         type: Date,

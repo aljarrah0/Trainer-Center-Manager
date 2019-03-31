@@ -5,24 +5,25 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 // create the schema providers
 const providersSchema = new mongoose.Schema({
     employeeID: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.Number,
         ref: 'Employee',
         required: true,
+        trim:true,
     },
     providerName: {
         type: String,
         required: true,
         trim: true,
-        maxlength: 255,
         minlength: 3,
+        maxlength: 255,
         lowercase: true,
     },
     providerDesc: {
         type: String,
         required: true,
         trim: true,
-        maxlength: 255,
         minlength: 3,
+        maxlength: 255,
         lowercase: true,
     },
     creationDate: {
@@ -38,22 +39,24 @@ const Provider = mongoose.model('providers', providersSchema);
 function validationProvider(provider) {
     const schema = Joi.object()
         .keys({
+            employeeID: Joi.number()
+                .required()
+                .integer()
+                .positive(),
             providerName: Joi.string()
-                .alphanum()
                 .required()
                 .lowercase()
-                .max(255)
                 .min(3)
+                .max(255)
                 .trim(),
             providerDesc: Joi.string()
                 .alphanum()
                 .required()
                 .lowercase()
-                .max(255)
                 .min(3)
+                .max(255)
                 .trim(),
-            employeeID: Joi.any()
-                .required(),
+
         });
     return Joi.validate(provider, schema);
 }

@@ -5,13 +5,13 @@ const Joi = require('joi');
 // create group schema
 const courseSchema = new mongoose.Schema({
     employeeID: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.Number,
         ref: 'Employee',
         required: true,
         trim: true,
     },
     providerID: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.Number,
         ref: 'Provider',
         required: true,
         trim: true,
@@ -20,21 +20,35 @@ const courseSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
+        minlength:5,
+        maxlength:255,
+    },
+    // Object Shape : Track Name - Track Hours - Track Outlines
+    courseTracks :{
+        type:[Object],
+        required: true,
+        trim: true,
     },
     courseDesc: {
         type: String,
         required: true,
         trim: true,
+        minlength:5,
+        maxlength:255,
     },
     courseHours: {
         type: Number,
         required: true,
         trim: true,
+        min:5,
+        max:200,
     },
     coursePrice: {
         type: Number,
         required: true,
         trim: true,
+        min:500,
+        max:5000,
     },
     priceAfterDiscount: {
         type: Number,
@@ -53,15 +67,21 @@ const Course = mongoose.model('courses', courseSchema);
 function validateCourse(course) {
     const schema = Joi.object()
         .keys({
-            employeeID: Joi.any()
-                .required(),
-            providerID: Joi.any()
-                .required(),
+            employeeID: Joi.number()
+                .required()
+                .integer()
+                .positive(),
+            providerID: Joi.number()
+                .required()
+                .integer()
+                .positive(),
             courseName: Joi.string()
                 .required()
                 .trim()
                 .min(5)
                 .max(255),
+            courseTracks: Joi.object()
+                .required(),
             courseDesc: Joi.string()
                 .required()
                 .trim()
@@ -70,8 +90,8 @@ function validateCourse(course) {
             courseHours: Joi.number()
                 .integer()
                 .required()
-                .min(50)
-                .max(160),
+                .min(5)
+                .max(200),
             coursePrice: Joi.number()
                 .required()
                 .min(500)

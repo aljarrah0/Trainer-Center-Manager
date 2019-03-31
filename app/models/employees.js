@@ -31,12 +31,14 @@ const employeesSchema = new mongoose.Schema({
     homeTel: {
         type: String,
         trim: true,
+        unique: true,
         maxlength: 12, // +20 50 (7digit)
     },
     mobile1: {
         type: String,
         required: true,
         trim: true,
+        unique: true,
         maxlength: 11, // +20 (10digit)
         validate: {
             validator: value => validator.isMobilePhone(value, 'ar-EG'),
@@ -46,6 +48,7 @@ const employeesSchema = new mongoose.Schema({
     mobile2: {
         type: String,
         trim: true,
+        unique: true,
         maxlength: 11, // +20 (10digit)
         validate: {
             validator: value => validator.isMobilePhone(value, 'ar-EG'),
@@ -63,12 +66,6 @@ const employeesSchema = new mongoose.Schema({
             validator: value => validator.isEmail(value),
             message: 'the email is not correct',
         },
-    },
-    creationDate: {
-        type: Date,
-        default: Date.now(),
-        trim: true,
-        required: true,
     },
     gender: {
         type: String,
@@ -90,6 +87,12 @@ const employeesSchema = new mongoose.Schema({
         maxlength: 255,
         minlength: 5,
         lowercase: true,
+    },
+    creationDate: {
+        type: Date,
+        default: Date.now(),
+        trim: true,
+        required: true,
     },
 }).plugin(AutoIncrement, { inc_field: 'employeeID' });
 

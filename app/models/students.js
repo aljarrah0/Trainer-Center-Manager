@@ -7,9 +7,10 @@ const validator = require('validator');
 // create the schema students
 const studentsSchema = new mongoose.Schema({
     employeeID: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.Number,
         ref: 'Employee',
         required: true,
+        trim: true,
     },
     fullNameArabic: {
         type: String,
@@ -17,8 +18,6 @@ const studentsSchema = new mongoose.Schema({
         trim: true,
         maxlength: 255,
         minlength: 3,
-
-
     },
     fullNameEnglish: {
         type: String,
@@ -38,23 +37,25 @@ const studentsSchema = new mongoose.Schema({
     homeTel: {
         type: String,
         trim: true,
-        maxlength: 12, // +20 50 (7digit)
+        unique: true,
+        maxlength: 10,
     },
     mobile1: {
         type: String,
         required: true,
         trim: true,
-        maxlength: 13, // +20 (10digit)
+        unique: true,
+        maxlength: 11,
         validate: {
             validator: value => validator.isMobilePhone(value, 'ar-EG'),
             message: 'the mobile1 is not correct',
-
         },
     },
     mobile2: {
         type: String,
         trim: true,
-        maxlength: 13, // +20 (10digit)
+        unique: true,
+        maxlength: 11,
         validate: {
             validator: value => validator.isMobilePhone(value, 'ar-EG'),
             message: 'the mobile2 is not correct',
@@ -72,28 +73,25 @@ const studentsSchema = new mongoose.Schema({
             message: 'the email is not correct',
         },
     },
-    creationDate: {
-        type: Date,
-        default: Date.now(),
-        required: true,
-    },
     gender: {
         type: String,
         required: true,
+        trim: true,
         enum: ['male', 'female'],
         lowercase: true,
     },
     studentsType: {
         type: String,
         required: true,
+        trim: true,
         enum: ['individual', 'corporate', 'univeristy'],
         lowercase: true,
     },
     city: {
         type: String,
         required: true,
-        enum: cities,
         trim: true,
+        enum: cities,
     },
     address: {
         type: String,
@@ -101,6 +99,11 @@ const studentsSchema = new mongoose.Schema({
         trim: true,
         maxlength: 255,
         minlength: 5,
+    },
+    creationDate: {
+        type: Date,
+        default: Date.now(),
+        required: true,
     },
 }).plugin(AutoIncrement, { inc_field: 'studentID' });
 
@@ -110,8 +113,10 @@ const Student = mongoose.model('students', studentsSchema);
 function validationStudents(student) {
     const schema = Joi.object()
         .keys({
-            employeeID: Joi.any()
-                .required(),
+            employeeID: Joi.number()
+                .required()
+                .integer()
+                .positive(),
             fullNameArabic: Joi.string()
                 .required()
                 .max(255)
