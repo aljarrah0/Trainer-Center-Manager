@@ -32,7 +32,7 @@ const studentsSchema = new mongoose.Schema({
         required: true,
         trim: true,
         unique: true,
-        maxlength: 14, // 14 digit in egypt
+        maxlength: 14,
     },
     homeTel: {
         type: String,

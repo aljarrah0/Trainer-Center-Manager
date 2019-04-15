@@ -4,30 +4,30 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const groupStudentsSchema = new mongoose.Schema({
     employeeID: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.Number,
         ref: 'Employee',
         required: true,
         trim: true,
     },
     groupID: {
-        type: Number,
+        type: mongoose.Schema.Types.Number,
         required: true,
         trim: true
     },
     studentID: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.Number,
         ref: 'Student',
         required: true,
         trim: true,
     },
     trainerID: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.Number,
         ref: 'Trainer',
         required: true,
         trim: true,
     },
     courseID: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.Number,
         ref: 'Group',
         required: true,
         trim: true
@@ -45,14 +45,16 @@ const GroupStudent = mongoose.model('group-student', groupStudentsSchema);
 function validateGroupStudent(groupStudent) {
     const schema = Joi.object()
         .keys({
-            employeeID: Joi.any()
+            employeeID: Joi.number()
                 .required(),
-            groupID: Joi.any()
+            groupID: Joi.number()
                 .required(),
-            studentID: Joi.any()
+            studentID: Joi.number()
                 .required(),
-            trainerID: Joi.any()
-                .required()
+            trainerID: Joi.number()
+                .required(),
+            courseID: Joi.number()
+                .required(),
         });
     return Joi.validate(groupStudent, schema);
 }

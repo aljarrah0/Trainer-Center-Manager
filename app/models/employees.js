@@ -26,20 +26,20 @@ const employeesSchema = new mongoose.Schema({
         required: true,
         trim: true,
         unique: true,
-        maxlength: 14, // 14 digit in egypt
+        maxlength: 14,
     },
     homeTel: {
         type: String,
         trim: true,
         unique: true,
-        maxlength: 12, // +20 50 (7digit)
+        maxlength: 12,
     },
     mobile1: {
         type: String,
         required: true,
         trim: true,
         unique: true,
-        maxlength: 11, // +20 (10digit)
+        maxlength: 11,
         validate: {
             validator: value => validator.isMobilePhone(value, 'ar-EG'),
             message: 'the mobile1 is not correct',
@@ -49,7 +49,7 @@ const employeesSchema = new mongoose.Schema({
         type: String,
         trim: true,
         unique: true,
-        maxlength: 11, // +20 (10digit)
+        maxlength: 11,
         validate: {
             validator: value => validator.isMobilePhone(value, 'ar-EG'),
             message: 'the mobile2 is not correct',
@@ -100,6 +100,7 @@ const employeesSchema = new mongoose.Schema({
 const Employee = mongoose.model('employees', employeesSchema);
 
 function validationEmployee(employee) {
+
     const schema = Joi.object()
         .keys({
             fullNameArabic: Joi.string()

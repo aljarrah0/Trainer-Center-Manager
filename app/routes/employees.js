@@ -17,6 +17,15 @@ router.post('/', async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
+    const nationalID = await Employee.findOne({ nationalID: req.body.nationalID });
+    if (nationalID) return res.status(400).send('the nationalID is exist');
+
+    const mobile1 = await Employee.findOne({ mobile1: req.body.mobile1 });
+    if (mobile1) return res.status(400).send('the mobile1 is exist');
+
+    const mobile2 = await Employee.findOne({ mobile2: req.body.mobile1 });
+    if (mobile2) return res.status(400).send('the mobile2 is exist');
+
     let employee = await Employee.findOne({ email: req.body.email });
     if (employee) return res.status(404).send('the employee already registration');
 

@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const _ = require('lodash');
-const mongoose = require('mongoose');
 const { Course, validate } = require('../models/courses');
+const { Employee } = require('../models/employees');
+const { Provider } = require('../models/providers');
 
 router.get('/', async (req, res) => {
     const courses = await Course.find().sort('courseID').select('-_id -__v');
@@ -18,6 +19,13 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
+
+
+    const employeeID = await Employee.findOne({ employeeID: req.body.employeeID });
+    if (!employeeID) return res.status(400).send('the employeeID is not correct');
+
+    const providerID = await Provider.findOne({ providerID: req.body.providerID });
+    if (providerID) return res.status(400).send('the providerID is exist');
 
     const course = new Course(_.pick(req.body,
         [

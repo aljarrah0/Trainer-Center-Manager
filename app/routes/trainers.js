@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const _ = require('lodash');
-const mongoose = require('mongoose');
 const { Trainer, validate } = require('../models/trainers');
+const { Employee } = require('../models/employees');
 
 router.get('/', async (req, res) => {
     const trainers = await Trainer.find().sort('name').select('-__v');
@@ -18,6 +18,18 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
+
+    const employeeID = await Employee.findOne({ employeeID: req.body.employeeID });
+    if (!employeeID) return res.status(400).send('the employeeID is not correct');
+
+    const nationalID = await Trainer.findOne({ nationalID: req.body.nationalID });
+    if (nationalID) return res.status(400).send('the nationalID is exist');
+
+    const mobile1 = await Trainer.findOne({ mobile1: req.body.mobile1 });
+    if (mobile1) return res.status(400).send('the mobile1 is exist');
+
+    const mobile2 = await Trainer.findOne({ mobile2: req.body.mobile1 });
+    if (mobile2) return res.status(400).send('the mobile2 is exist');
 
     let trainer = await Trainer.findOne({ email: req.body.email });
     if (trainer) return res.status(404).send('the trainer is exist');
@@ -44,13 +56,11 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-    const validateID = mongoose.Types.ObjectId.isValid(req.params.id);
-    if (!validateID) return res.status(400).send('the ID is not Correct');
-
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    const updateTrainer = await Trainer.findByIdAndUpdate(req.params.id,
+
+    const updateTrainer = await Trainer.findOneAndUpdate({ trainerID: req.params.id },
         _.pick(req.body,
             [
                 'employeeID',
@@ -68,7 +78,7 @@ router.put('/:id', async (req, res) => {
                 'pricePerHour',
             ]), { new: true, runValidators: true, });
 
-    if (!updateTrainer) return res.status(404).send('error in DB');
+    if (!updateTrainer) return res.status(404).send('the trainer with the given ID was not found...');
     res.send(updateTrainer);
 });
 

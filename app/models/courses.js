@@ -20,12 +20,29 @@ const courseSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        minlength:5,
-        maxlength:255,
+        minlength: 5,
+        maxlength: 255,
     },
     // Object Shape : Track Name - Track Hours - Track Outlines
-    courseTracks :{
-        type:[Object],
+    // EX: MAEN stack ---> Mong.. Angul.. Expre.. Node..    25  60 10 10
+    courseTracks: {
+        type: [{
+            trackName: {
+                type: String,
+                required: true,
+                trim: true,
+            },
+            trackHours: {
+                type: Number,
+                required: true,
+                trim: true,
+            },
+            trackOutline: {
+                type: String,
+                required: true,
+                trim: true,
+            },
+        }],
         required: true,
         trim: true,
     },
@@ -33,22 +50,22 @@ const courseSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        minlength:5,
-        maxlength:255,
+        minlength: 5,
+        maxlength: 255,
     },
     courseHours: {
         type: Number,
         required: true,
         trim: true,
-        min:5,
-        max:200,
+        min: 5,
+        max: 200,
     },
     coursePrice: {
         type: Number,
         required: true,
         trim: true,
-        min:500,
-        max:5000,
+        min: 500,
+        max: 5000,
     },
     priceAfterDiscount: {
         type: Number,
@@ -80,7 +97,12 @@ function validateCourse(course) {
                 .trim()
                 .min(5)
                 .max(255),
-            courseTracks: Joi.object()
+            courseTracks: Joi.array()
+                .items(Joi.object({
+                    trackName: Joi.string().required().trim(),
+                    trackHours: Joi.number().required(),
+                    trackOutline: Joi.string().required().trim(),
+                }))
                 .required(),
             courseDesc: Joi.string()
                 .required()
@@ -98,7 +120,7 @@ function validateCourse(course) {
                 .max(5000),
             priceAfterDiscount: Joi.number(),
         });
-        
+
     return Joi.validate(course, schema);
 }
 

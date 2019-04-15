@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const _ = require('lodash');
 const { Group, validate } = require('../models/groups');
-
+const {Employee} = require('../models/employees');
 router.get('/', async (req, res) => {
     const groups = await Group.find().sort('groupID').select('-_id -__v');
     res.send(groups);
@@ -17,6 +17,9 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
+
+    const employeeID = await Employee.findOne({employeeID:req.body.employeeID});
+    if (!employeeID) return res.status(400).send('the employeeID is not correct');
 
     const group = new Group(_.pick(req.body, [
         'employeeID',
