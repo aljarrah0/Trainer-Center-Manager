@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const Joi = require('joi');
+const {Course} = require('../models/courses');
 
 // create group schema
 
@@ -8,6 +9,12 @@ const groupSchema = new mongoose.Schema({
     employeeID: {
         type: mongoose.Schema.Types.Number,
         ref: 'Employee',
+        required: true,
+        trim: true,
+    },
+    courseID: {
+        type: mongoose.Schema.Types.Number,
+        ref: 'Course',
         required: true,
         trim: true,
     },
@@ -41,10 +48,10 @@ const groupSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
-    groupEndDate: {
-        type: Date,
-        trim: true,
-    },
+    // groupEndDate: {
+    //     type: Date,
+    //     trim: true,
+    // },
     creationDate: {
         type: Date,
         default: Date.now(),
@@ -53,12 +60,39 @@ const groupSchema = new mongoose.Schema({
     },
 }).plugin(AutoIncrement, { inc_field: 'groupID' });
 
+function numberOfHoursInWeek(groupSchedule) {
+    let hours = 0;
+    for (const element of groupSchedule) {
+        let hour = element.to - element.from;
+        hours += hour;
+    }
+    return hours;
+}
+
+groupSchema.statics.groupEndDate = async (groupID, courseID) => {
+    let { courseHours } = await Course.findOne({ courseID });
+    console.log(courseHours);
+
+    let { groupSchedule } = await Group.findOne({ groupID });
+    let numberOfHours = numberOfHoursInWeek(groupSchedule);
+    console.log(numberOfHours);
+
+    console.log(courseHours / numberOfHours);
+
+}
+
 const Group = mongoose.model('groups', groupSchema);
+
+Group.groupEndDate(26,1);
 
 function validateGroup(group) {
     const schema = Joi.object()
         .keys({
             employeeID: Joi.number()
+                .required()
+                .integer()
+                .positive(),
+            courseID: Joi.number()
                 .required()
                 .integer()
                 .positive(),
@@ -77,7 +111,6 @@ function validateGroup(group) {
         });
     return Joi.validate(group, schema);
 }
-
 
 exports.Group = Group;
 exports.validate = validateGroup;
